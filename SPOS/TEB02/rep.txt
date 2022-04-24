@@ -1,0 +1,7 @@
+This is a sample file created to check how program runs.
+
+3
+2
+1
+
+Bye.
