@@ -1,0 +1,24 @@
+<?xml version = "1.0"?> 
+<?xml-stylesheet type = "text/xsl" href = "mock.xsl"?> 
+<?xml-stylesheet type = "text/css" href = "mock.css"?> 
+<class> 
+   <alumni id= "1"> 
+      <name>Praveen</name> 
+      <email>prvshinde777@gmail.com</email> 
+      <address>Mumbai</address> 
+      <contact>7325647480</contact> 
+   </alumni> 
+   <alumni id= "2"> 
+      <name>Abhi</name> 
+      <email>abgupta@gmail.com</email> 
+      <address>Pune</address> 
+      <contact>8256487745</contact> 
+   </alumni> 
+   <alumni id= "3"> 
+      <name>Cathline</name> 
+      <email>wt@gmail.com</email> 
+      <address>Ahmedabad</address> 
+      <contact>7350252690</contact> 
+   </alumni> 
+   
+</class>

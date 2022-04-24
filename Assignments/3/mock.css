@@ -1,0 +1,17 @@
+
+class { 
+     color: blue; 
+     background-color : lightblue; 
+     width: 100%; 
+} 
+ alumni { 
+     color: green; 
+     font-size : 40px; 
+     background-color : powderblue; 
+} 
+ id,name,email,address,contact { 
+     display : block; 
+} 
+  
+} 
+
