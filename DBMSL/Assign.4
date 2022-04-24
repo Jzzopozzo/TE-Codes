@@ -1,0 +1,159 @@
+mysql> create table Student(Student_ID varchar(10),Stud_Name varchar(20),Instructor_ID varchar(10),Stud_City varchar(20));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_TEA21 |
++-----------------+
+| Student         |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> create table Instructor(Instructor_ID varchar(10),Instructor_Name varchar(20),Instructor_City varchar(20),Specialization varchar(30));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_TEA21 |
++-----------------+
+| Instructor      |
+| Student         |
++-----------------+
+2 rows in set (0.00 sec)
+
+
+mysql> insert into Student values('S01','Sharvari','I01','Nashik'),('S02','Sam','I03','Mumbai'),('S04','Nupur','I07','Pune');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from Student;
++------------+-----------+---------------+-----------+
+| Student_ID | Stud_Name | Instructor_ID | Stud_City |
++------------+-----------+---------------+-----------+
+| S01        | Sharvari  | I01           | Nashik    |
+| S02        | Sam       | I03           | Mumbai    |
+| S04        | Nupur     | I07           | Pune      |
++------------+-----------+---------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> insert into Student(Student_ID,Stud_Name,Stud_city) values('S03','John','Chennai');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Student(Student_ID,Stud_Name,Stud_city) values('S05','Sara','Nagpur');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from Student;
++------------+-----------+---------------+-----------+
+| Student_ID | Stud_Name | Instructor_ID | Stud_City |
++------------+-----------+---------------+-----------+
+| S01        | Sharvari  | I01           | Nashik    |
+| S02        | Sam       | I03           | Mumbai    |
+| S04        | Nupur     | I07           | Pune      |
+| S03        | John      | NULL          | Chennai   |
+| S05        | Sara      | NULL          | Nagpur    |
++------------+-----------+---------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into Instructor values('I01','Ram','Pune','Computer'),('I03','Sham','Mumbai','C++'),('I07','Radhika','Nashik','JAVA');
+Query OK, 3 rows affected (0.04 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from Instructor;
++---------------+-----------------+-----------------+----------------+
+| Instructor_ID | Instructor_Name | Instructor_City | Specialization |
++---------------+-----------------+-----------------+----------------+
+| I01           | Ram             | Pune            | Computer       |
+| I03           | Sham            | Mumbai          | C++            |
+| I07           | Radhika         | Nashik          | JAVA           |
++---------------+-----------------+-----------------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Student inner join Instructor on Student.Instructor_ID=Instructor.Instructor_ID;
++------------+-----------+---------------+-----------+---------------+-----------------+-----------------+----------------+
+| Student_ID | Stud_Name | Instructor_ID | Stud_City | Instructor_ID | Instructor_Name | Instructor_City | Specialization |
++------------+-----------+---------------+-----------+---------------+-----------------+-----------------+----------------+
+| S01        | Sharvari  | I01           | Nashik    | I01           | Ram             | Pune            | Computer       |
+| S02        | Sam       | I03           | Mumbai    | I03           | Sham            | Mumbai          | C++            |
+| S04        | Nupur     | I07           | Pune      | I07           | Radhika         | Nashik          | JAVA           |
++------------+-----------+---------------+-----------+---------------+-----------------+-----------------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select Student.Stud_Name,Instructor.Instructor_Name from (Student inner join Instructor on Student.Instructor_ID=Instructor.Instructor_ID);
++-----------+-----------------+
+| Stud_Name | Instructor_Name |
++-----------+-----------------+
+| Sharvari  | Ram             |
+| Sam       | Sham            |
+| Nupur     | Radhika         |
++-----------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select Student.Stud_Name,Instructor.Instructor_Name from Student inner join Instructor on Student.Instructor_ID=Instructor.Instructor_ID;
++-----------+-----------------+
+| Stud_Name | Instructor_Name |
++-----------+-----------------+
+| Sharvari  | Ram             |
+| Sam       | Sham            |
+| Nupur     | Radhika         |
++-----------+-----------------+
+3 rows in set (0.00 sec)
+
+mysql> select Stud_Name from Student where Instructor_ID is NULL;
++-----------+
+| Stud_Name |
++-----------+
+| John      |
+| Sara      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select Student.Stud_Name from Student inner join Instructor on Instructor.Specialization='Computer';
++-----------+
+| Stud_Name |
++-----------+
+| Sharvari  |
+| Sam       |
+| Nupur     |
+| John      |
+| Sara      |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select Student.Stud_Name from Student inner join Instructor on Instructor.Specialization='Computer' and Student.Instructor_ID=Instructor.Instructor_ID;
++-----------+
+| Stud_Name |
++-----------+
+| Sharvari  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from Student inner join Instructor on Student.Instructor_ID=Instructor.Instructor_ID and Instructor.Instructor_City='Pune';
++----------+
+| count(*) |
++----------+
+|        1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> notee;
+mysql> (select Stud_Name,Student.Instructor_ID,Instructor_Name from Student left outer join Instructor on Student.Instructor_ID=Instructor.Instructor_ID where Student.Instructor_ID is NULL) union (select Stud_Name,Instructor.Instructor_ID,Instructor.Instructor_Name from Student right outer join Instructor on Student.Instructor_ID=Instructor.Instructor_ID where Student.Student_ID is NULL);
++-----------+---------------+-----------------+
+| Stud_Name | Instructor_ID | Instructor_Name |
++-----------+---------------+-----------------+
+| John      | NULL          | NULL            |
+| Sara      | NULL          | NULL            |
+| NULL      | I13           | Seema           |
++-----------+---------------+-----------------+
+3 rows in set (0.01 sec)
+
+mysql> create view STUDS as select count(Stud_Name),Stud_Name from Student inner join Instructor on Student.Instructor_ID=Instructor.Instructor_ID where Instructor.Instructor_City='Pune';
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from STUDS;
++------------------+-----------+
+| count(Stud_Name) | Stud_Name |
++------------------+-----------+
+|                1 | Sharvari  |
++------------------+-----------+
+1 row in set (0.00 sec)
+

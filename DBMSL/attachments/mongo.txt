@@ -1,0 +1,550 @@
+ use tea16
+switched to db tea16
+> db.createCollection('book')
+{ "ok" : 1 }
+> db.book.insert({title:'mongodb',description:'educational',by:'john',url:'www.mongo.com',tags:10,likes:150})
+WriteResult({ "nInserted" : 1 })
+> db.book.insert({title:'mongodb',description:'educational',by:'steve',url:'www.mongodb.com',tags:30,likes:30})
+WriteResult({ "nInserted" : 1 })
+> db.book.insert({title:'study_java',description:'educational',by:'john',url:'www.google.com',tags:25,likes:200})
+WriteResult({ "nInserted" : 1 })
+> db.book.insert({title:'study_c',description:'educational',by:'john',url:'www.google.com',tags:45,likes:50})
+WriteResult({ "nInserted" : 1 })
+> db.book.insert({title:'study_c++',description:'educational',by:'donald',url:'www.google.in',tags:32,likes:143})
+WriteResult({ "nInserted" : 1 })
+> db.book.find().pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+> db.book.insert({title:'study_python',description:'educational',by:'mickey',url:'www.python.in',tags:54,likes:250,user_name:'smith',comment:'useful'})
+WriteResult({ "nInserted" : 1 })
+> db.book.find().pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+> db.book.find({name:'mongodb'})
+> db.book.find({title:'mongodb'})
+{ "_id" : ObjectId("59a910741d70603a7cbbb9de"), "title" : "mongodb", "description" : "educational", "by" : "john", "url" : "www.mongo.com", "tags" : 10, "likes" : 150 }
+{ "_id" : ObjectId("59a9109a1d70603a7cbbb9df"), "title" : "mongodb", "description" : "educational", "by" : "steve", "url" : "www.mongodb.com", "tags" : 30, "likes" : 30 }
+> db.book.find({name:'mongodb'}).pretty()
+> db.book.find({title:'mongodb'}).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+> db.book.find({$or : [{title:'mongodb'},{by: 'john'}]}).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+> db.book.find({title:'mongodb'},{by:'john'}).pretty()
+{ "_id" : ObjectId("59a910741d70603a7cbbb9de"), "by" : "john" }
+{ "_id" : ObjectId("59a9109a1d70603a7cbbb9df"), "by" : "steve" }
+> db.book.find({title:'mongodb',by:'john'}).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+> db.book.find({like: {$gt:10}}).pretty()
+> db.book.find({likes: {$gt:10}}).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+> db.book.find(likes:{$gt : 100},{$or : [{title:'mongodb'},{by: 'john'}]}).pretty()
+2017-09-01T13:38:03.589+0530 E QUERY    [thread1] SyntaxError: missing ) after argument list @(shell):1:18
+
+> db.book.find({likes:{$gt : 100},{$or : [{title:'mongodb'},{by: 'john'}]}}).pretty()
+2017-09-01T13:38:33.117+0530 E QUERY    [thread1] SyntaxError: invalid property id @(shell):1:32
+
+> db.book.find({likes:{$gt : 100}},{$or : [{title:'mongodb'},{by: 'john'}]}}).pretty()
+2017-09-01T13:39:15.077+0530 E QUERY    [thread1] SyntaxError: missing ) after argument list @(shell):1:73
+
+> db.book.find({likes:{$gt : 100},$or : [{title:'mongodb'},{by: 'john'}]}).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+> db.book.update({title:'mongodb'},{$set:{title:'mongodb_overview'}})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+> db.book.find().pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910d01d70603a7cbbb9e0"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 25,
+	"likes" : 200
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+> db.book.remove({title:'study_java'})
+WriteResult({ "nRemoved" : 1 })
+> db.book.find().pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+> db.book.find({by : 'john'}).limit(2).pretty()
+\{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+> db.book.find({by : 'john'}).limit(1).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+> db.book.find({by : 'john'}).limit(1).pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+> db.book.find({by : 'john'}).limit(1).skip(1)pretty()
+2017-09-01T13:48:06.598+0530 E QUERY    [thread1] SyntaxError: missing ; before statement @(shell):1:44
+
+> db.book.find({by : 'john'}).limit(1).skip(1).pretty()
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+> db.book.find().sort({title:1}).pretty()
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+> db.book.save({title:'study_java',description:'educational',by:'donald',url:'www.java.in',tags:25,likes:235})
+WriteResult({ "nInserted" : 1 })
+> db.book.find().pretty()
+{
+	"_id" : ObjectId("59a910741d70603a7cbbb9de"),
+	"title" : "mongodb_overview",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.mongo.com",
+	"tags" : 10,
+	"likes" : 150
+}
+{
+	"_id" : ObjectId("59a9109a1d70603a7cbbb9df"),
+	"title" : "mongodb",
+	"description" : "educational",
+	"by" : "steve",
+	"url" : "www.mongodb.com",
+	"tags" : 30,
+	"likes" : 30
+}
+{
+	"_id" : ObjectId("59a910ed1d70603a7cbbb9e1"),
+	"title" : "study_c",
+	"description" : "educational",
+	"by" : "john",
+	"url" : "www.google.com",
+	"tags" : 45,
+	"likes" : 50
+}
+{
+	"_id" : ObjectId("59a9110f1d70603a7cbbb9e2"),
+	"title" : "study_c++",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.google.in",
+	"tags" : 32,
+	"likes" : 143
+}
+{
+	"_id" : ObjectId("59a912931d70603a7cbbb9e3"),
+	"title" : "study_python",
+	"description" : "educational",
+	"by" : "mickey",
+	"url" : "www.python.in",
+	"tags" : 54,
+	"likes" : 250,
+	"user_name" : "smith",
+	"comment" : "useful"
+}
+{
+	"_id" : ObjectId("59a91d751d70603a7cbbb9e4"),
+	"title" : "study_java",
+	"description" : "educational",
+	"by" : "donald",
+	"url" : "www.java.in",
+	"tags" : 25,
+	"likes" : 235
+}
+> 
+
+

@@ -1,0 +1,115 @@
+mysql> select * from Employee;
++---------------+----------+---------+------+
+| Employee_name | Street   | City    | Age  |
++---------------+----------+---------+------+
+| Aditi         | M_G_Road | Pune    |   22 |
+| Disha         | Shastri  | Mysore  |   23 |
+| Pratiksha     | ASDA     | Thane   |   22 |
+| Radha         | Meera    | Indore  |   21 |
+| Ram           | J_road   | Aasam   |   22 |
+| Rohit         | Mahatma  | Chennai |   24 |
+| Shraddha      | DS_Road  | Mumbai  |   23 |
++---------------+----------+---------+------+
+7 rows in set (0.00 sec)
+
+mysql> select Employee_name,Company_name from Works;
++---------------+--------------+
+| Employee_name | Company_name |
++---------------+--------------+
+| Aditi         | Infosys      |
+| Ram           | HCL          |
+| Radha         | M&M          |
+| Pratiksha     | TCS          |
+| Disha         | KPIT         |
+| Rohit         | TCS          |
+| Shraddha      | TCS          |
++---------------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from Employee where Employee_name like 'S%';
++---------------+---------+--------+------+
+| Employee_name | Street  | City   | Age  |
++---------------+---------+--------+------+
+| Shraddha      | DS_Road | Mumbai |   23 |
++---------------+---------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> notee;
+mysql> select Employee.Employee_name,Employee.City,Works.Company_name,Company.City from Employee,Works,Company where Employee.Employee_name=Works.Employee_name,Works.Company_name=Company.Company_name;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Works.Company_name=Company.Company_name' at line 1
+mysql> select Employee.Employee_name,Employee.City,Company.Company_name,Company.City from Employee,Works,Company where Employee.Employee_name=Works.Employee_name and Works.Company_name=Company.Company_name;
++---------------+---------+--------------+-----------+
+| Employee_name | City    | Company_name | City      |
++---------------+---------+--------------+-----------+
+| Ram           | Aasam   | HCL          | USA       |
+| Aditi         | Pune    | Infosys      | Bangalore |
+| Disha         | Mysore  | KPIT         | Chennai   |
+| Radha         | Indore  | M&M          | Manali    |
+| Pratiksha     | Thane   | TCS          | Bangal    |
+| Rohit         | Chennai | TCS          | Bangal    |
+| Shraddha      | Mumbai  | TCS          | Bangal    |
++---------------+---------+--------------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> select Employee.Employee_name,Employee.City,Works.Company_name from Employee,Works where Employee.Employee_name=Works.Employee_name;
++---------------+---------+--------------+
+| Employee_name | City    | Company_name |
++---------------+---------+--------------+
+| Aditi         | Pune    | Infosys      |
+| Disha         | Mysore  | KPIT         |
+| Pratiksha     | Thane   | TCS          |
+| Radha         | Indore  | M&M          |
+| Ram           | Aasam   | HCL          |
+| Rohit         | Chennai | TCS          |
+| Shraddha      | Mumbai  | TCS          |
++---------------+---------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> notee;
+mysql> update Works set Salary=Salary+10000 where Employee_name='Shraddha';
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Aditi         | Infosys      | 1000000 |
+| Ram           | HCL          | 9000000 |
+| Radha         | M&M          | 7000000 |
+| Pratiksha     | TCS          | 8000000 |
+| Disha         | KPIT         | 6000000 |
+| Rohit         | TCS          | 7000000 |
+| Shraddha      | TCS          |   30000 |
++---------------+--------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Aditi         | Infosys      | 1000000 |
+| Ram           | HCL          | 9000000 |
+| Radha         | M&M          | 7000000 |
+| Pratiksha     | TCS          | 8000000 |
+| Disha         | KPIT         | 6000000 |
+| Rohit         | TCS          | 7000000 |
+| Shraddha      | TCS          |   30000 |
++---------------+--------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> select * from Employee;
++---------------+----------+---------+------+
+| Employee_name | Street   | City    | Age  |
++---------------+----------+---------+------+
+| Aditi         | M_G_Road | Pune    |   22 |
+| Disha         | Shastri  | Mysore  |   23 |
+| Pratiksha     | ASDA     | Thane   |   22 |
+| Radha         | Meera    | Indore  |   35 |
+| Ram           | J_road   | Aasam   |   33 |
+| Rohit         | Mahatma  | Chennai |   40 |
+| Shraddha      | DS_Road  | Mumbai  |   23 |
++---------------+----------+---------+------+
+7 rows in set (0.00 sec)
+
+mysql> notee;

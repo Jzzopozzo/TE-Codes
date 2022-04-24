@@ -1,0 +1,83 @@
+use db
+switched to db db
+> db.createCollection("Books")
+{ "ok" : 1 }
+> db.Books.insert({title: "DBMS", description: "Database", by: "john", url:"www.dbms.com", tags: 35})
+WriteResult({ "nInserted" : 1 })
+> db.Books.insert({title: "Docs", description: "Documents", by: "john", url:"www.db.com", tags: 56})
+WriteResult({ "nInserted" : 1 })
+> db.Books.insert({title: "mongodb", description: "nosql", by: "smith", url:"www.mongodb.com", tags: 56})
+WriteResult({ "nInserted" : 1 })
+> db.Books.insert({title: "Docs1", description: "Documents", by: "john", url:"www.db1.com", tags: 56, likes: 20})
+WriteResult({ "nInserted" : 1 })
+> db.Books.insert({title: "Docs2", description: "Documents", by: "john", url:"www.db2.com", tags: 54, likes: 70})
+WriteResult({ "nInserted" : 1 })
+> db.Books.find().pretty()
+{
+	"_id" : ObjectId("59ad08e5e6506ecba06f182a"),
+	"title" : "DBMS",
+	"description" : "Database",
+	"by" : "john",
+	"url" : "www.dbms.com",
+	"tags" : 35
+}
+{
+	"_id" : ObjectId("59ad090ce6506ecba06f182b"),
+	"title" : "Docs",
+	"description" : "Documents",
+	"by" : "john",
+	"url" : "www.db.com",
+	"tags" : 56
+}
+{
+	"_id" : ObjectId("59ad096fe6506ecba06f182c"),
+	"title" : "mongodb",
+	"description" : "nosql",
+	"by" : "smith",
+	"url" : "www.mongodb.com",
+	"tags" : 56
+}
+{
+	"_id" : ObjectId("59ad098ae6506ecba06f182d"),
+	"title" : "Docs1",
+	"description" : "Documents",
+	"by" : "john",
+	"url" : "www.db1.com",
+	"tags" : 56,
+	"likes" : 20
+}
+{
+	"_id" : ObjectId("59ad09a0e6506ecba06f182e"),
+	"title" : "Docs2",
+	"description" : "Documents",
+	"by" : "john",
+	"url" : "www.db2.com",
+	"tags" : 54,
+	"likes" : 70
+}
+
+*********************************************************************************************************************
+1. Find the number of books published by john.
+> db.Books.count({by:"john"})
+4
+
+2. Find books which have minimum likes and maximum likes published by john.
+> db.Books.aggregate([{$match: {by: "john"}},{$group: {_id: '$by', total: {$min: '$likes'}}}])
+{ "_id" : "john", "total" : 20 }
+> db.Books.aggregate([{$match: {by: "john"}},{$group: {_id: '$by', total: {$max: '$likes'}}}])
+{ "_id" : "john", "total" : 70 }
+
+3. Find the average number of likes of the books published by john.
+> db.Books.aggregate([{$match: {by: "john"}},{$group: {_id: '$by', total: {$avg: '$likes'}}}])
+{ "_id" : "john", "total" : 45 }
+
+4. Find the first and the books published by john.
+> db.Books.aggregate([{$match: {by: "john"}},{$group: {_id: '$by', url: {$first: '$url'}}}])
+{ "_id" : "john", "url" : "www.dbms.com" }
+> db.Books.aggregate([{$match: {by: "john"}},{$group: {_id: '$by', url: {$last: '$url'}}}])
+{ "_id" : "john", "url" : "www.db2.com" }
+
+5. Create an index on author name.
+
+
+*********************************************************************************************************************

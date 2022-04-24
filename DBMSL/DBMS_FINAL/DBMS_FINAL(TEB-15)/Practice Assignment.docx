@@ -1,0 +1,311 @@
+﻿				PRACTICE ASSIGNMENT
+
+Akshay S. Chavan						TEB-15
+
+
+Database Schema:
+
+Account(Acc_no,branch_name,balance) 
+Branch(branch_name,branch_city,assets) 
+Customer(cust_name,cust_street,cust_city) 
+Depositor(cust_name,acc_no) 
+Loan(loan_no,branch_name,amount)  
+Borrower(cust_name,loan_no)
+
+mysql> select * from Account;
++--------+-------------+-----------+
+| Acc_no | Branch_Name | Balance   |
++--------+-------------+-----------+
+|    111 | Akurdi      |    100000 |
+|    123 | Adgaon Naka | 100000000 |
+|    555 | Adgaon Naka |      1000 |
++--------+-------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Branch;
++-------------+-------------+--------+
+| Branch_Name | Branch_City | Assets |
++-------------+-------------+--------+
+| Adgaon Naka | Nashik      | ABC    |
+| Akurdi      | Nashik      | XYZ    |
+| N1          | Nigdi       | XYZ    |
+| N2          | Nigdi       | XYZ    |
+| N3          | Nigdi       | XYZ    |
++-------------+-------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Customer;
++-----------+-------------+----------+
+| Cust_Name | Cust_Street | Cut_City |
++-----------+-------------+----------+
+| Akshay    | ABC         | Nashik   |
+| Ashutosh  | PQL         | Mumbai   |
+| Aabid     | AKS         | Nigdi    |
+| Renita    | ABC         | Akurdi   |
+| Rahul     | ABX         | Nashik   |
+| Bhavika   | ABC         | Pune     |
++-----------+-------------+----------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Depositor;
++-----------+--------+
+| Cust_name | Acc_no |
++-----------+--------+
+| Akshay    |    123 |
+| Ashutosh  |    111 |
+| Bhavika   |    777 |
+| Rahul     |    121 |
+| Rahul     |    121 |
++-----------+--------+
+5 rows in set (0.00 sec)
+
+
+
+mysql> select * from Loan;
++---------+-------------+------------+
+| Loan_no | Branch_Name | Amount     |
++---------+-------------+------------+
+|       1 | Akurdi      |   10000000 |
+|       2 | Akurdi      |     100000 |
+|       3 | Adgaon Naka |    1000000 |
+|       4 | Adgaon Naka | 1000000000 |
+|       5 | N1          | 1000000000 |
+|       6 | N2          |   10000000 |
++---------+-------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Borrower;
++-----------+---------+
+| Cust_name | Loan_no |
++-----------+---------+
+| Renita    |       1 |
+| Akshay    |       2 |
+| Ashutosh  |       3 |
+| Aabid     |       4 |
+| Bhavika   |       5 |
+| Rahul     |       4 |
++-----------+---------+
+6 rows in set (0.00 sec)
+
+
+1.Find the names of all branches in loan relation.
+
+mysql> select Branch_Name from Loan;
++-------------+
+| Branch_Name |
++-------------+
+| Akurdi      |
+| Akurdi      |
+| Adgaon Naka |
+| Adgaon Naka |
+| N1          |
+| N2          |
++-------------+
+6 rows in set (0.00 sec)
+
+
+
+
+2. Find all loan numbers for loans made at Akurdi Branch with loan amount > 12000.
+
+mysql> select Loan_no from Loan where Branch_Name='Akurdi' and Amount>12000;
++---------+
+| Loan_no |
++---------+
+|       1 |
+|       2 |
++---------+
+2 rows in set (0.00 sec)
+
+
+3. Find all customers who have a loan from bank. Find their names,loan_no and loan  amount.
+
+mysql> select c.Cust_name,l.Loan_no,l.Amount from Customer c,Loan l,Borrower b where c.Cust_name=b.Cust_name and b.Loan_no=l.Loan_no;
++-----------+---------+------------+
+| Cust_name | Loan_no | Amount     |
++-----------+---------+------------+
+| Renita    |       1 |   10000000 |
+| Akshay    |       2 |     100000 |
+| Ashutosh  |       3 |    1000000 |
+| Aabid     |       4 | 1000000000 |
++-----------+---------+------------+
+
+
+
+4. List all customers in alphabetical order who have loan from Akurdi branch.
+
+mysql> select b.Cust_name from Borrower b, Loan l where b.Loan_no=l.Loan_no and l.Branch_Name='Akurdi' ORDER BY b.Cust_Name;
++-----------+
+| Cust_name |
++-----------+
+| Akshay    |
+| Renita    |
++-----------+
+2 rows in set (0.33 sec)
+
+
+5.Find all customers who have an account or loan or both at bank.
+
+mysql> (select c.Cust_name from Customer c, Depositor d,Account a, Loan l,Borrower b where d.Acc_no=a.Acc_no) union (select distinct c.Cust_name from Customer c,Depositor d,Account a, Loan l,Borro
++-----------+
+| Cust_name |
++-----------+
+| Akshay    |
+| Ashutosh  |
+| Aabid     |
+| Renita    |
+| Rahul     |
++-----------+
+5 rows in set (0.00 sec)
+
+
+6.  Find all customers who have both account and loan at bank.
+
+
+mysql> select  distinct c.Cust_name from Customer c, Depositor d,Account a, Loan l,Borrower b where d.Acc_no=a.Acc_no AND c.Cust_name=b.Cust_name AND b.Loan_no=l.Loan_no;
++-----------+
+| Cust_name |
++-----------+
+| Akshay    |
+| Ashutosh  |
+| Aabid     |
+| Renita    |
+| Bhavika   |
++-----------+
+5 rows in set (0.00 sec)
+
+
+7. Find all customer who have account but no loan at the bank. 
+
+mysql> select distinct c.Cust_name from Customer c, Depositor d,Account a, Loan l,Borrower b where d.Acc_no=a.Acc_no AND c.Cust_name NOT IN(select distinct c.Cust_name from Customer c,Depositor d,Account a, Loan l,Borrower b where c.Cust_name=b.Cust_name AND b.Loan_no=l.Loan_no);
++-----------+
+| Cust_name |
++-----------+
+| Rahul     |
++-----------+
+1 row in set (0.00 sec)
+
+
+
+8. Find average account balance at Akurdi branch.
+
+mysql> select avg(Balance) from Account where Branch_Name='Akurdi';
++--------------+
+| avg(Balance) |
++--------------+
+|  100000.0000 |
++--------------+
+1 row in set (0.00 sec)
+
+
+9. Find the average account balance at each branch
+
+mysql> select Branch_Name,avg(Balance) from Account GROUP BY Branch_Name;
++-------------+---------------+
+| Branch_Name | avg(Balance)  |
++-------------+---------------+
+| Adgaon Naka | 50000500.0000 |
+| Akurdi      |   100000.0000 |
++-------------+---------------+
+2 rows in set (0.33 sec)
+
+
+10. Find no. of depositors at each branch.
+
+mysql> select Branch_Name,count(Acc_no) from Account GROUP BY Branch_Name;
++-------------+---------------+
+| Branch_Name | count(Acc_no) |
++-------------+---------------+
+| Adgaon Naka |             2 |
+| Akurdi      |             1 |
++-------------+---------------+
+2 rows in set (0.04 sec)
+
+
+
+11. Find the branches where average account balance > 12000.
+
+mysql> select Branch_Name from Account GROUP BY Branch_Name  having  avg(Balance)>12000;
++-------------+
+| Branch_Name |
++-------------+
+| Adgaon Naka |
+| Akurdi      |
++-------------+
+2 rows in set (0.01 sec)
+
+
+12. Find number of tuples in customer relation.
+
+mysql> select count(Cust_Name) from Customer;
++------------------+
+| count(Cust_Name) |
++------------------+
+|                6 |
++------------------+
+1 row in set (0.00 sec)
+
+
+13. Calculate total loan amount given by bank.
+
+mysql> select sum(Amount) from Loan;
++-------------+
+| sum(Amount) |
++-------------+
+|  2021100000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+14. Delete all loans with loan amount between 1300 and 1500.
+
+mysql> DELETE from Loan where Amount>1300 AND Amount<1500;
+Query OK, 2 rows affected (0.11 sec)
+
+
+15. Delete all tuples at every branch located in Nigdi.
+
+mysql> DELETE from Branch where Branch_Name='Nigdi';
+Query OK, 0 rows affected (0.33 sec)
+
+
+16. Create synonym for customer table as cust.
+
+mysql> create view Cust as SELECT * from Customer;
+Query OK, 0 rows affected (0.43 sec)
+
+mysql> select * from Cust;
++-----------+-------------+----------+
+| Cust_Name | Cust_Street | Cut_City |
++-----------+-------------+----------+
+| Akshay    | ABC         | Nashik   |
+| Ashutosh  | PQL         | Mumbai   |
+| Aabid     | AKS         | Nigdi    |
+| Renita    | ABC         | Akurdi   |
+| Rahul     | ABX         | Nashik   |
+| Bhavika   | ABC         | Pune     |
++-----------+-------------+----------+
+6 rows in set (0.11 sec)
+
+
+17. Create sequence roll_seq and use in student table for roll_no column.
+
+mysql> create table Student(Roll_no int PRIMARY KEY NOT NULL AUTO_INCREMENT,Name varchar(30)); 
+Query OK, 0 rows affected (0.43 sec)
+
+mysql> insert into Student values(1,'Akshay');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into Student(Name) values('Ashutosh');Query OK, 1 row affected (0.07 sec)
+
+mysql> select * from Student;
++---------+----------+
+| Roll_no | Name     |
++---------+----------+
+|       1 | Akshay   |
+|       2 | Ashutosh |
++---------+----------+
+2 rows in set (0.00 sec)
+
+
+

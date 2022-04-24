@@ -1,0 +1,89 @@
+				ASSIGNMENT NO-04
+Akshay S. Chavan					TEB-15
+__________________________________________________________________________________________________________
+
+---------------------------------SCHEMAS----------------------------------
+mysql> select * from student;
++------------+--------------+---------------+--------------+
+| STUDENT_ID | STUDENT_NAME | INSTRUCTOR_ID | STUDENT_CITY |
++------------+--------------+---------------+--------------+
+|          1 | Akshay       |           101 | New York     |
+|          2 | Aditya       |           105 | Rome         |
+|          3 | Ashutosh     |           103 | Las Vegas    |
+|          4 | Priyanka     |           107 | Paris        |
+|          5 | Sneha        |          NULL | Pakistan     |
++------------+--------------+---------------+--------------+
+
+
+mysql> select * from instructor;
++---------------+-----------------+-----------------+----------------------+
+| INSTRUCTOR_ID | INSTRUCTOR_NAME | INSTRUCTOR_CITY | SPECIALIZATION       |
++---------------+-----------------+-----------------+----------------------+
+|           101 | A. V. Tavare    | Pune            | Software Engineering |
+|           102 | P. S. Kamalapur | Delhi           | Discrete Mathematics |
+|           103 | C. R. Patil     | Mumbai          | Data Structures      |
+|           104 | M. P. Mahajan   | Pune            | Digital Electronics  |
+|           105 | A. I. Khalid    | Egypt           | JAVA Programming     |
+|           106 | A. P. Jadhav    | Nashik          | Python Programming   |
+|           107 | K. D. Munot     | Chicago         | Computer             |
++---------------+-----------------+-----------------+----------------------+
+
+__________________________________________________________________________________________________________
+
+1. Find the instructor of each student
+
+mysql> select s.STUDENT_NAME,i.INSTRUCTOR_NAME from student s,instructor i where s.INSTRUCTOR_ID=i.INSTRUCTOR_ID;
++--------------+-----------------+
+| STUDENT_NAME | INSTRUCTOR_NAME |
++--------------+-----------------+
+| Akshay       | A. V. Tavare    |
+| Ashutosh     | C. R. Patil     |
+| Aditya       | A. I. Khalid    |
+| Priyanka     | K. D. Munot     |
++--------------+-----------------+
+
+
+2.Find the students who do not have any instructor
+
+mysql> select STUDENT_NAME from student where INSTRUCTOR_ID is NULL;
++--------------+
+| STUDENT_NAME |
++--------------+
+| Sneha        |
++--------------+
+
+3.Find the student who is not having any instructor as well as instructor who is not having any students
+
+mysql> (select STUDENT_NAME as STUDENTS_INSTRUCTORS from student where INSTRUCTOR_ID is NULL) union (select i.INSTRUCTOR_NAME from student s right join instructor i on s.INSTRUCTOR_ID=i.INSTRUCTOR_ID where s.INSTRUCTOR_ID is NULL);
++----------------------+
+| STUDENTS_INSTRUCTORS |
++----------------------+
+| Sneha                |
+| P. S. Kamalapur      |
+| M. P. Mahajan        |
+| A. P. Jadhav         |
++----------------------+
+
+
+4. Find the students who's instructor specialization is Computer
+
+select s.STUDENT_NAME from student s,instructor i where s.INSTRUCTOR_ID=i.INSTRUCTOR_ID and i.SPECIALIZATION="Computer";
++--------------+
+| STUDENT_NAME |
++--------------+
+| Priyanka     |
++--------------+
+
+
+5. Create a view containing total no. of students who's instructor belongs to Pune
+
+mysql> create view v1 as select count(STUDENT_NAME) from (select s.STUDENT_NAME from student s, instructor i where i.INSTRUCTOR_CITY="Pune" and s.INSTRUCTOR_ID=i.INSTRUCTOR_ID)stud;
+
+
+mysql> select * from v1;
++---------------------+
+| count(STUDENT_NAME) |
++---------------------+
+|                   1 |
++---------------------+
+

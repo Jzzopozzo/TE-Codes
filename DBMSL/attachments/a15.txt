@@ -1,0 +1,349 @@
+mysql> desc works;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_name | varchar(10) | YES  | MUL | NULL    |       |
+| company_name  | varchar(10) | YES  |     | NULL    |       |
+| salary        | int(10)     | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc company;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| company_name | varchar(10) | YES  |     | NULL    |       |
+| city         | varchar(10) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> describe works;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_name | varchar(10) | YES  | MUL | NULL    |       |
+| company_name  | varchar(10) | YES  | MUL | NULL    |       |
+| salary        | int(10)     | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+
+mysql> describe manager;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_name | varchar(10) | YES  | MUL | NULL    |       |
+| manager_name  | varchar(10) | YES  | MUL | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> alter table employee add age int(5);
+Query OK, 0 rows affected (0.58 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe employee;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| employee_name | varchar(10) | NO   | PRI | NULL    |       |
+| street        | varchar(10) | YES  |     | NULL    |       |
+| city          | varchar(10) | YES  |     | NULL    |       |
+| age           | int(5)      | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select *from employee;
++---------------+------------+--------+------+
+| employee_name | street     | city   | age  |
++---------------+------------+--------+------+
+| roshani       | adgaon     | nashik | NULL |
+| sadhna        | panchavati | pune   | NULL |S
++---------------+------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee,company;
++---------------+------------+--------+------+--------------+--------+
+| employee_name | street     | city   | age  | company_name | city   |
++---------------+------------+--------+------+--------------+--------+
+| roshani       | adgaon     | nashik | NULL | INFOSIS      | pune   |
+| sadhna        | panchavati | pune   | NULL | INFOSIS      | pune   |
+| roshani       | adgaon     | nashik | NULL | TCS          | Mumbai |
+| sadhna        | panchavati | pune   | NULL | TCS          | Mumbai |
++---------------+------------+--------+------+--------------+--------+
+4 rows in set (0.00 sec)
+mysql> select * from employee,company;
++---------------+------------+--------+------+--------------+--------+
+| employee_name | street     | city   | age  | company_name | city   |
++---------------+------------+--------+------+--------------+--------+
+| roshani       | adgaon     | nashik | NULL | INFOSIS      | pune   |
+| sadhna        | panchavati | pune   | NULL | INFOSIS      | pune   |
+| roshani       | adgaon     | nashik | NULL | TCS          | Mumbai |
+| sadhna        | panchavati | pune   | NULL | TCS          | Mumbai |
++---------------+------------+--------+------+--------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select employee.employee_name,company_name,employee.city from works,employee;
++---------------+--------------+--------+
+| employee_name | company_name | city   |
++---------------+--------------+--------+
+| roshani       | INFOSIS      | nashik |
+| roshani       | TCS          | nashik |
+| sadhna        | INFOSIS      | pune   |
+| sadhna        | TCS          | pune   |
++---------------+--------------+--------+
+4 rows in set (0.00 sec)
+mysql> select works.employee_name,company_name,employee.city from works,employee;
++---------------+--------------+--------+
+| employee_name | company_name | city   |
++---------------+--------------+--------+
+| roshani       | TCS          | nashik |
+| sadhna        | INFOSIS      | nashik |
+| roshani       | TCS          | pune   |
+| sadhna        | INFOSIS      | pune   |
++---------------+--------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select employee.employee_name,company_name,employee.city from works,employee where works.employee_name=employee.employee_name;
++---------------+--------------+--------+
+| employee_name | company_name | city   |
++---------------+--------------+--------+
+| roshani       | TCS          | nashik |
+| sadhna        | INFOSIS      | pune   |
++---------------+--------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from company;
++--------------+--------+
+| company_name | city   |
++--------------+--------+
+| INFOSIS      | pune   |
+| TCS          | Mumbai |
++--------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee;
++---------------+------------+--------+------+
+| employee_name | street     | city   | age  |
++---------------+------------+--------+------+
+| roshani       | adgaon     | nashik | NULL |
+| sadhna        | panchavati | pune   | NULL |
++---------------+------------+--------+------+
+2 rows in set (0.00 sec)
+
+
+mysql> select employee.employee_name,employee.city from works,employee where company_name='TCS';
++---------------+--------+
+| employee_name | city   |
++---------------+--------+
+| roshani       | nashik |
+| sadhna        | pune   |
++---------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select employee.employee_name,employee.city from works,employee where works.company_name='TCS';
++---------------+--------+
+| employee_name | city   |
++---------------+--------+
+| roshani       | nashik |
+| sadhna        | pune   |
++---------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select works.employee_name,employee.city from works,employee where company_name='TCS';
++---------------+--------+
+| employee_name | city   |
++---------------+--------+
+| roshani       | nashik |
+| roshani       | pune   |
++---------------+--------+
+2 rows in set (0.00 sec)
+
+
+mysql> select works.employee_name,employee.city from works,employee where company_name='TCS' and works.employee_name=employee.employee_name ;
++---------------+--------+
+| employee_name | city   |
++---------------+--------+
+| roshani       | nashik |
++---------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select works.employee_name,employee.city from works,employee where company_name='INFOSIS' and works.employee_name=employee.employee_name ;
++---------------+------+
+| employee_name | city |
++---------------+------+
+| sadhna        | pune |
++---------------+------+
+1 row in set (0.00 sec)
+
+mysql> select works.employee_name,employee.street,employee.city from works,employee                                                                         salary>=10000;
++---------------+--------+--------+
+| employee_name | street | city   |
++---------------+--------+--------+
+| roshani       | adgaon | nashik |
++---------------+--------+--------+
+1 row in set (0.00 sec)
+
+mysql> mysql> select works.employee_name,employee.street,employee.city from works,employe company_name='TCS' and works.employee_name=employee.employee_name and salary<=10000;
+Empty set (0.00 sec)
+
+mysql> select works.employee_name,employee.street,employee.city from works,employee where company_name='INFOSIS' and works.employee_name=employee.employee_name and salary<=10000;
++---------------+------------+------+
+| employee_name | street     | city |
++---------------+------------+------+
+| sadhna        | panchavati | pune |
++---------------+------------+------+
+1 row in set (0.00 sec)
+
+mysql> select works.employee_name,works.company_name from works,company,employee where employee.city=company.city and works.employee_name=employee.employee_name;
++---------------+--------------+
+| employee_name | company_name |
++---------------+--------------+
+| sadhna        | INFOSIS      |
++---------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employee where employee_name in (select employee_name from works where company_name='TCS' and salary>10000);
++---------------+--------+--------+------+
+| employee_name | street | city   | age  |
++---------------+--------+--------+------+
+| roshani       | adgaon | nashik | NULL |
++---------------+--------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> select employee_name from employee where employee_name in (select employee_name from works where company_name='TCS' and salary>10000);
++---------------+
+| employee_name |
++---------------+
+| roshani       |
++---------------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from employee;
++---------------+------------+--------+------+
+| employee_name | street     | city   | age  |
++---------------+------------+--------+------+
+| roshani       | adgaon     | nashik | NULL |
+| sadhna        | panchavati | pune   | NULL |
++---------------+------------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from employee;
++---------------+------------+--------+------+
+| employee_name | street     | city   | age  |
++---------------+------------+--------+------+
+| roshani       | adgaon     | nashik | NULL |
+| sadhna        | panchavati | pune   | NULL |
++---------------+------------+--------+------+
+2 rows in set (0.04 sec)
+
+mysql> select * from company;
++--------------+--------+
+| company_name | city   |
++--------------+--------+
+| INFOSIS      | pune   |
+| TCS          | Mumbai |
++--------------+--------+
+2 rows in set (0.04 sec)
+
+mysql> select * from works;
++---------------+--------------+--------+
+| employee_name | company_name | salary |
++---------------+--------------+--------+
+| roshani       | TCS          |  12000 |
+| sadhna        | INFOSIS      |   2000 |
++---------------+--------------+--------+
+2 rows in set (0.06 sec)
+
+mysql> select max(employee_name) from works group by company_name; 
++--------------------+
+| max(employee_name) |
++--------------------+
+| sadhna             |
+| roshani            |
++--------------------+
+2 rows in set (0.03 sec)
+
+mysql> select min(employee_name) from works group by company_name;
++--------------------+
+| min(employee_name) |
++--------------------+
+| sadhna             |
+| roshani            |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> select count(employee_name) from works group by company_name;
++----------------------+
+| count(employee_name) |
++----------------------+
+|                    1 |
+|                    1 |
++----------------------+
+2 rows in set (0.00 sec)
+
+mysql> select max(employee_name) from works group by company_name;
++--------------------+
+| max(employee_name) |
++--------------------+
+| sadhna             |
+| roshani            |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> select company_name from works where employee_name in (select max(employee_name) from works group by company_name);
++--------------+
+| company_name |
++--------------+
+| TCS          |
+| INFOSIS      |
++--------------+
+2 rows in set (0.00 sec)
+
+mysql> select company_name from works where employee_name in (select max(employee_name) from works group by company_name);
++--------------+
+| company_name |
++--------------+
+| TCS          |
+| INFOSIS      |
++--------------+
+2 rows in set (0.00 sec)
+
+mysql> select company_name from works where company_name in (select max(employee_name) from works group by company_name);
+Empty set (0.00 sec)
+
+mysql> select company_name from works where employee_name in (select min(salary) from works group by company_name);
+Empty set (0.00 sec)
+
+mysql> select company_name from works where salary in (select min(salary) from works group by company_name);
++--------------+
+| company_name |
++--------------+
+| TCS          |
+| INFOSIS      |
++--------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from works where salary in (select min(salary) from works group by company_name);
++---------------+--------------+--------+
+| employee_name | company_name | salary |
++---------------+--------------+--------+
+| roshani       | TCS          |  12000 |
+| sadhna        | INFOSIS      |   2000 |
++---------------+--------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select * from works where salary<all (select min(salary) from works group by company_name);
+Empty set (0.00 sec)
+
+mysql> select * from works where salary>all (select min(salary) from works group by company_name);
+Empty set (0.00 sec)
+
+mysql>  (select min(salary) from works group by company_name);
++-------------+
+| min(salary) |
++-------------+
+|        2000 |
+|       12000 |
++-------------+
+2 rows in set (0.00 sec)

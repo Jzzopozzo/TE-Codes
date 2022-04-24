@@ -1,0 +1,415 @@
+mysql> select * from Account;
++--------+-------------+---------+
+| acc_no | branch_name | balance |
++--------+-------------+---------+
+|   1001 | Panchvati   |   20000 |
+|   1023 | Panchvati   |   14500 |
+|   1115 | Akurdi      |   30000 |
+|   1125 | Panchvati   |    1000 |
+|   1212 | Akurdi      |   15000 |
+|   1340 | Adgaon      |   10000 |
++--------+-------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from branch;
++-------------+-------------+--------+
+| branch_name | branch_city | assets |
++-------------+-------------+--------+
+| Adgaon      | Nashik      |  10000 |
+| Akurdi      | Pune        |  12000 |
+| Panchvati   | Nigdi       |  20000 |
++-------------+-------------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from customer;
++-----------+-------------+-----------+
+| cust_name | cust_street | cust_city |
++-----------+-------------+-----------+
+| Mona      | Naygaon     | Nashik    |
+| Neha      | Adgaon      | Nashik    |
+| Sona      | Urjanagar   | Nagpur    |
+| Tina      | Rampeth     | Pune      |
++-----------+-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from Depositor;
++-----------+--------+
+| cust_name | acc_no |
++-----------+--------+
+| Tina      |   1212 |
+| Mona      |   1115 |
+| Neha      |   1001 |
+| Mona      |   1340 |
+| Sona      |   1340 |
+| Sona      |   1023 |
++-----------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Loan;
++---------+-------------+--------+
+| loan_no | branch_name | amount |
++---------+-------------+--------+
+|    5101 | Panchvati   |  20000 |
+|    5102 | Panchvati   | 350000 |
+|    5103 | Akurdi      |  50000 |
+|    5104 | Akurdi      |  50000 |
+|    5105 | Panchvati   | 600000 |
+|    5106 | Adgaon      |  60000 |
++---------+-------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Borrower;
++-----------+---------+
+| cust_name | loan_no |
++-----------+---------+
+| Neha      |    5102 |
+| Mona      |    5103 |
+| Sona      |    5104 |
+| Tina      |    5104 |
+| Tina      |    5106 |
+| Neha      |    5101 |
++-----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select branch_name from Loan ;
++-------------+
+| branch_name |
++-------------+
+| Adgaon      |
+| Akurdi      |
+| Akurdi      |
+| Panchvati   |
+| Panchvati   |
+| Panchvati   |
++-------------+
+6 rows in set (0.00 sec)
+
+mysql> select branch_name from Loan group by branch_name;
++-------------+
+| branch_name |
++-------------+
+| Adgaon      |
+| Akurdi      |
+| Panchvati   |
++-------------+
+3 rows in set (0.02 sec)
+
+mysql> select loan_no from Loan where branch_name="Akurdi" and amount>12000;
++---------+
+| loan_no |
++---------+
+|    5103 |
+|    5104 |
++---------+
+2 rows in set (0.00 sec)
+
+mysql> select cust_name from Borrower;
++-----------+
+| cust_name |
++-----------+
+| Mona      |
+| Neha      |
+| Neha      |
+| Sona      |
+| Tina      |
+| Tina      |
++-----------+
+6 rows in set (0.00 sec)
+
+mysql> select cust_name,Borrower.loan_no,amount from Borrower,Loan where Borrower.loan_no=Loan.loan_no;
++-----------+---------+--------+
+| cust_name | loan_no | amount |
++-----------+---------+--------+
+| Neha      |    5102 | 350000 |
+| Mona      |    5103 |  50000 |
+| Sona      |    5104 |  50000 |
+| Tina      |    5104 |  50000 |
+| Tina      |    5106 |  60000 |
+| Neha      |    5101 |  20000 |
++-----------+---------+--------+
+6 rows in set (0.00 sec)
+
+
+mysql> select cust_name from Borrower,Loan where Loan.branch_name="Akurdi" and Borrower.loan_no=Loan.loan_no order by cust_name asc;
++-----------+
+| cust_name |
++-----------+
+| Mona      |
+| Sona      |
+| Tina      |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> (select cust_name from Depositor) union (select cust_name from Borrower);
++-----------+
+| cust_name |
++-----------+
+| Mona      |
+| Neha      |
+| Sona      |
+| Tina      |
++-----------+
+4 rows in set (0.00 sec)
+
+mysql> select cust_name from Borrower where cust_name in (select cust_name from Depositor);
++-----------+
+| cust_name |
++-----------+
+| Mona      |
+| Neha      |
+| Neha      |
+| Sona      |
+| Tina      |
+| Tina      |
++-----------+
+6 rows in set (0.00 sec)
+
+mysql> select cust_name from Depositor where cust_name not in (select cust_name from Borrower);
+Empty set (0.02 sec)
+
+mysql> select avg(balance) from Account where branch_name='Akurdi';
++--------------+
+| avg(balance) |
++--------------+
+|   22500.0000 |
++--------------+
+1 row in set (0.02 sec)
+
+mysql> select avg(balance) from Account group by branch_name;
++--------------+
+| avg(balance) |
++--------------+
+|   10000.0000 |
+|   22500.0000 |
+|   11833.3333 |
++--------------+
+3 rows in set (0.00 sec)
+
+mysql> select branch_name,avg(balance) from Account group by branch_name;
++-------------+--------------+
+| branch_name | avg(balance) |
++-------------+--------------+
+| Adgaon      |   10000.0000 |
+| Akurdi      |   22500.0000 |
+| Panchvati   |   11833.3333 |
++-------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> select count(cust_name) from Depositor group by acc_no;
++------------------+
+| count(cust_name) |
++------------------+
+|                1 |
+|                1 |
+|                1 |
+|                1 |
+|                2 |
++------------------+
+5 rows in set (0.00 sec)
+
+mysql> select count(cust_name) from Depositor group by acc_no;
++------------------+
+| count(cust_name) |
++------------------+
+|                1 |
+|                1 |
+|                1 |
+|                1 |
+|                2 |
++------------------+
+5 rows in set (0.00 sec)
+
+mysql> select Account.branch_name,count(cust_name) from Depositor,Account group by Account.acc_no;
++-------------+------------------+
+| branch_name | count(cust_name) |
++-------------+------------------+
+| Panchvati   |                6 |
+| Panchvati   |                6 |
+| Akurdi      |                6 |
+| Panchvati   |                6 |
+| Akurdi      |                6 |
+| Adgaon      |                6 |
++-------------+------------------+
+6 rows in set (0.01 sec)
+
+mysql> select Account.branch_name,count(cust_name) from Depositor,Account group by Account.branch_name;
++-------------+------------------+
+| branch_name | count(cust_name) |
++-------------+------------------+
+| Adgaon      |                6 |
+| Akurdi      |               12 |
+| Panchvati   |               18 |
++-------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> select Account.branch_name,count(Account.acc_no) from Depositor,Account group by Account.branch_name;
++-------------+-----------------------+
+| branch_name | count(Account.acc_no) |
++-------------+-----------------------+
+| Adgaon      |                     6 |
+| Akurdi      |                    12 |
+| Panchvati   |                    18 |
++-------------+-----------------------+
+3 rows in set (0.00 sec)
+
+mysql> select Account.branch_name,count(Depositor.acc_no) from Depositor,Account group by Account.branch_name;
++-------------+-------------------------+
+| branch_name | count(Depositor.acc_no) |
++-------------+-------------------------+
+| Adgaon      |                       6 |
+| Akurdi      |                      12 |
+| Panchvati   |                      18 |
++-------------+-------------------------+
+3 rows in set (0.00 sec)
+
+mysql> select count(cust_name) from Depositor,Account where Depositor.acc_no=Account.acc_no;
++------------------+
+| count(cust_name) |
++------------------+
+|                6 |
++------------------+
+1 row in set (0.01 sec)
+
+mysql> select count(cust_name) from Depositor,Account where Depositor.acc_no=Account.acc_no group by branch_name;
++------------------+
+| count(cust_name) |
++------------------+
+|                2 |
+|                2 |
+|                2 |
++------------------+
+3 rows in set (0.00 sec)
+
+mysql> select Account.branch_name,count(cust_name) from Depositor,Account where Depositor.acc_no=Account.acc_no group by branch_name;
++-------------+------------------+
+| branch_name | count(cust_name) |
++-------------+------------------+
+| Adgaon      |                2 |
+| Akurdi      |                2 |
+| Panchvati   |                2 |
++-------------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> select branch_name from Account group by branch_name having avg(balance)>12000
+    -> ;
++-------------+
+| branch_name |
++-------------+
+| Akurdi      |
++-------------+
+1 row in set (0.01 sec)
+
+mysql> select branch_name from Account group by branch_name having avg(balance)<12000;
++-------------+
+| branch_name |
++-------------+
+| Adgaon      |
+| Panchvati   |
++-------------+
+2 rows in set (0.00 sec)
+
+mysql> select cust_name,S.loan_no,amount from Loan as T,Borrower as S where T.loan_no=S.loan_no;
++-----------+---------+--------+
+| cust_name | loan_no | amount |
++-----------+---------+--------+
+| Neha      |    5102 | 350000 |
+| Mona      |    5103 |  50000 |
+| Sona      |    5104 |  50000 |
+| Tina      |    5104 |  50000 |
+| Tina      |    5106 |  60000 |
+| Neha      |    5101 |  20000 |
++-----------+---------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select branch_name,sum(amount) from Loan group by branch_name;
++-------------+-------------+
+| branch_name | sum(amount) |
++-------------+-------------+
+| Adgaon      |       60000 |
+| Akurdi      |      100000 |
+| Panchvati   |      970000 |
++-------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> update Loan set amount=NULL where amount>1300 and amount<1500;
+Query OK, 0 rows affected (0.02 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update Loan set amount=NULL where amount>130000 and amount<150000;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select * from Loan;
++---------+-------------+--------+
+| loan_no | branch_name | amount |
++---------+-------------+--------+
+|    5101 | Panchvati   |  20000 |
+|    5102 | Panchvati   | 350000 |
+|    5103 | Akurdi      |  50000 |
+|    5104 | Akurdi      |  50000 |
+|    5105 | Panchvati   | 600000 |
+|    5106 | Adgaon      |  60000 |
++---------+-------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> update Loan set amount=NULL where amount>13000 and amount<150000;
+Query OK, 4 rows affected (0.10 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select * from Loan;
++---------+-------------+--------+
+| loan_no | branch_name | amount |
++---------+-------------+--------+
+|    5101 | Panchvati   |   NULL |
+|    5102 | Panchvati   | 350000 |
+|    5103 | Akurdi      |   NULL |
+|    5104 | Akurdi      |   NULL |
+|    5105 | Panchvati   | 600000 |
+|    5106 | Adgaon      |   NULL |
++---------+-------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select cust_name from customer as cust;
++-----------+
+| cust_name |
++-----------+
+| Mona      |
+| Neha      |
+| Sona      |
+| Tina      |
++-----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from customer;
++-----------+-------------+-----------+
+| cust_name | cust_street | cust_city |
++-----------+-------------+-----------+
+| Mona      | Naygaon     | Nashik    |
+| Neha      | Adgaon      | Nashik    |
+| Sona      | Urjanagar   | Nagpur    |
+| Tina      | Rampeth     | Pune      |
++-----------+-------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select cust_name as cust from customer;
++------+
+| cust |
++------+
+| Mona |
+| Neha |
+| Sona |
+| Tina |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select * from customer;
++-----------+-------------+-----------+
+| cust_name | cust_street | cust_city |
++-----------+-------------+-----------+
+| Mona      | Naygaon     | Nashik    |
+| Neha      | Adgaon      | Nashik    |
+| Sona      | Urjanagar   | Nagpur    |
+| Tina      | Rampeth     | Pune      |
++-----------+-------------+-----------+
+4 rows in set (0.00 sec)
+

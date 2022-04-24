@@ -1,0 +1,194 @@
+mysql> select * from instructors;
++------+--------+---------+----------------+
+| i_id | i_name | i_city  | specialization |
++------+--------+---------+----------------+
+|  105 | S.K.Y. | Chennai | Computer       |
+|  111 | M.N.M. | Nashik  | I.T.           |
+|  203 | A.V.P. | Pune    | I.T.           |
+|  222 | H.S.T. | Pune    | Computer       |
++------+--------+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from students;
++------+--------+------+--------+
+| s_id | s_name | i_id | s_city |
++------+--------+------+--------+
+|   15 | Sima   |  105 | Pune   |
+|   22 | Neha   |  112 | Nashik |
+|   31 | Pooja  |  203 | Nashik |
+|   55 | Monal  |  253 | Mumbai |
++------+--------+------+--------+
+4 rows in set (0.00 sec)
+
+
+mysql> select instructors.i_name from (students inner join instructors on students.i_id=instructors.i_id);
++--------+
+| i_name |
++--------+
+| S.K.Y. |
+| A.V.P. |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select students.s_name,instructors.i_name from (students inner join instructors on students.i_id=instructors.i_id);
++--------+--------+
+| s_name | i_name |
++--------+--------+
+| Sima   | S.K.Y. |
+| Pooja  | A.V.P. |
++--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select students.s_name,instructors.i_name from (students left outer join instructors on students.i_id=instructors.i_id);
++--------+--------+
+| s_name | i_name |
++--------+--------+
+| Sima   | S.K.Y. |
+| Pooja  | A.V.P. |
+| Neha   | NULL   |
+| Monal  | NULL   |
++--------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select students.s_name from (students left outer join instructors on students.i_id="NULL");
++--------+
+| s_name |
++--------+
+| Sima   |
+| Neha   |
+| Pooja  |
+| Monal  |
++--------+
+4 rows in set, 1 warning (0.00 sec)
+
+mysql> select students.s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_id is NULL;
++--------+
+| s_name |
++--------+
+| Neha   |
+| Monal  |
++--------+
+2 rows in set (0.00 sec)
+
+
+mysql> (select students.s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_id is NULL) union (select instructors.i_name from (students right outer join instructors on students.i_id=instructors.i_id) where students.s_id is NULL);
++--------+
+| s_name |
++--------+
+| Neha   |
+| Monal  |
+| M.N.M. |
+| H.S.T. |
++--------+
+4 rows in set (0.00 sec)
+
+mysql> (select * from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_id is NULL) union (select * from (students right outer join instructors on students.i_id=instructors.i_id) where students.s_id is NULL);
++------+--------+------+--------+------+--------+--------+----------------+
+| s_id | s_name | i_id | s_city | i_id | i_name | i_city | specialization |
++------+--------+------+--------+------+--------+--------+----------------+
+|   22 | Neha   |  112 | Nashik | NULL | NULL   | NULL   | NULL           |
+|   55 | Monal  |  253 | Mumbai | NULL | NULL   | NULL   | NULL           |
+| NULL | NULL   | NULL | NULL   |  111 | M.N.M. | Nashik | I.T.           |
+| NULL | NULL   | NULL | NULL   |  222 | H.S.T. | Pune   | Computer       |
++------+--------+------+--------+------+--------+--------+----------------+
+4 rows in set (0.00 sec)
+
+************************************24/07/2017*******************************************************************
+
+mysql> (select students.s_name,instructors.i_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_id is NULL) union (select students.s_name,instructors.i_name from (students right outer join instructors on students.i_id=instructors.i_id) where students.s_name is NULL);
++--------+--------+
+| s_name | i_name |
++--------+--------+
+| Neha   | NULL   |
+| Monal  | NULL   |
+| NULL   | M.N.M. |
+| NULL   | H.S.T. |
++--------+--------+
+4 rows in set (0.02 sec)
+
+
+mysql> select s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.specialization="Computer";
++--------+
+| s_name |
++--------+
+| Sima   |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Computer";
+Empty set (0.00 sec)
+
+mysql> select s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Pune";
++--------+
+| s_name |
++--------+
+| Pooja  |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select * from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Pune";
++------+--------+------+--------+------+--------+--------+----------------+
+| s_id | s_name | i_id | s_city | i_id | i_name | i_city | specialization |
++------+--------+------+--------+------+--------+--------+----------------+
+|   31 | Pooja  |  203 | Nashik |  203 | A.V.P. | Pune   | I.T.           |
++------+--------+------+--------+------+--------+--------+----------------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from (students right outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Pune";
++------+--------+------+--------+------+--------+--------+----------------+
+| s_id | s_name | i_id | s_city | i_id | i_name | i_city | specialization |
++------+--------+------+--------+------+--------+--------+----------------+
+|   31 | Pooja  |  203 | Nashik |  203 | A.V.P. | Pune   | I.T.           |
+| NULL | NULL   | NULL | NULL   |  222 | H.S.T. | Pune   | Computer       |
++------+--------+------+--------+------+--------+--------+----------------+
+2 rows in set (0.00 sec)
+mysql> select s_name from (students right outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Pune";
++--------+
+| s_name |
++--------+
+| Pooja  |
+| NULL   |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> select s_name from (students left outer join instructors on students.i_id=instructors.i_id) where instructors.i_city="Pune";
++--------+
+| s_name |
++--------+
+| Pooja  |
++--------+
+1 row in set (0.00 sec)
+
+
+mysql> create view v_student as select s_id,s_name,instructors.i_name from students,instructors where instructors.i_city="Pune";
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from v_student;
++------+--------+--------+
+| s_id | s_name | i_name |
++------+--------+--------+
+|   15 | Sima   | A.V.P. |
+|   15 | Sima   | H.S.T. |
+|   22 | Neha   | A.V.P. |
+|   22 | Neha   | H.S.T. |
+|   31 | Pooja  | A.V.P. |
+|   31 | Pooja  | H.S.T. |
+|   55 | Monal  | A.V.P. |
+|   55 | Monal  | H.S.T. |
++------+--------+--------+
+8 rows in set (0.00 sec)
+
+
+mysql> create view v_students as select s_id,s_name,instructors.i_name from students,instructors where students.i_id=instructors.i_id and instructors.i_city="Pune";
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from v_students;                            
++------+--------+--------+
+| s_id | s_name | i_name |
++------+--------+--------+
+|   31 | Pooja  | A.V.P. |
++------+--------+--------+
+1 row in set (0.00 sec)
+
+

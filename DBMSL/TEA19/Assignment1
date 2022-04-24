@@ -1,0 +1,184 @@
+ mysql -uroot -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.7.18-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use TEA19
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+
+mysql> create table Employee(Employee_name varchar(20),Street varchar(10),City varchar(10),primary key(Employee_name));
+Query OK, 0 rows affected (0.23 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_TEA19 |
++-----------------+
+| Employee        |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Aditi','M_G_Road','Pune');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from Employee;
++---------------+----------+------+
+| Employee_name | Street   | City |
++---------------+----------+------+
+| Aditi         | M_G_Road | Pune |
++---------------+----------+------+
+1 row in set (0.00 sec)
+
+mysql> create table Company(Company_name varchar(20),City varchar(10),primary key(Company_name)); Query OK, 0 rows affected (0.21 sec)
+
+mysql> create table Works(Employee_name varchar(20),Company_name varchar(20),Salary int(7),foreign key(Employee_name)references Employee(Employee_name),foreign key(Company_name)references Company(Company_name));
+Query OK, 0 rows affected (0.29 sec)
+
+mysql> insert into Company(Company_name,City) values('Infosys','Bangalore');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Aditi','Infosys','1000000');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from Company;
++--------------+-----------+
+| Company_name | City      |
++--------------+-----------+
+| Infosys      | Bangalore |
++--------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Aditi         | Infosys      | 1000000 |
++---------------+--------------+---------+
+1 row in set (0.00 sec)
+
+mysql> create table Manages(Employee_name varchar(20),Manager_name varchar(20),foreign key(Employee_name)references Employee(Employee_name),foreign key(Manager_name)references Employee(Employee_name));
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Aditi','Aditi');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from Manages;
++---------------+--------------+
+| Employee_name | Manager_name |
++---------------+--------------+
+| Aditi         | Aditi        |
++---------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Disha','Shastri','Mysore');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Pratiksha','ASDA','Thane');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Radha','Meera','Indore');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Ram','J_road','Aasam');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Rohit','Mahatma','Chennai');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Company(Company_name,City) values('HCL','USA');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into Company(Company_name,City) values('TCS','Bangal');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Company(Company_name,City) values('KPIT','Chennai');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Company(Company_name,City) values('M&M','Manali');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Ram','HCL','9000000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Radha','M&M','7000000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Pratiksha','TCS','8000000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Disha','KPIT','6000000');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Rohit','TCS','7000000');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Disha','Rohit');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Rohit','Pratiksha');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Pratiksha','Ram');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from Employee;
++---------------+----------+---------+
+| Employee_name | Street   | City    |
++---------------+----------+---------+
+| Aditi         | M_G_Road | Pune    |
+| Disha         | Shastri  | Mysore  |
+| Pratiksha     | ASDA     | Thane   |
+| Radha         | Meera    | Indore  |
+| Ram           | J_road   | Aasam   |
+| Rohit         | Mahatma  | Chennai |
++---------------+----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Company;
++--------------+-----------+
+| Company_name | City      |
++--------------+-----------+
+| HCL          | USA       |
+| Infosys      | Bangalore |
+| KPIT         | Chennai   |
+| M&M          | Manali    |
+| TCS          | Bangal    |
++--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Aditi         | Infosys      | 1000000 |
+| Ram           | HCL          | 9000000 |
+| Radha         | M&M          | 7000000 |
+| Pratiksha     | TCS          | 8000000 |
+| Disha         | KPIT         | 6000000 |
+| Rohit         | TCS          | 7000000 |
++---------------+--------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Manages;
++---------------+--------------+
+| Employee_name | Manager_name |
++---------------+--------------+
+| Aditi         | Aditi        |
+| Disha         | Rohit        |
+| Rohit         | Pratiksha    |
+| Pratiksha     | Ram          |
++---------------+--------------+
+4 rows in set (0.00 sec)
+
+

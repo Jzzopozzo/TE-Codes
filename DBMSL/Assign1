@@ -1,0 +1,414 @@
+mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.7.18-0ubuntu0.16.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use TEA05;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+Database changed
+
+
+mysql> create table Employee(Employee_name varchar(20),Street varchar(10),City varchar(10),primary key(Employee_name));
+Query OK, 0 rows affected (1.69 sec)
+
+
+mysql> show tables;
++-----------------+
+| Tables_in_TEA05 |
++-----------------+
+| Employee        |
+| Student         |
++-----------------+
+2 rows in set (0.00 sec)
+
+
+mysql> insert into Employee(Employee_name,Street,City) values('Anuja','Maha_Road','Nashik');
+Query OK, 1 row affected (0.04 sec)
+
+
+
+mysql> select * from Employee;
++---------------+-----------+--------+
+| Employee_name | Street    | City   |
++---------------+-----------+--------+
+| Anuja         | Maha_Road | Nashik |
++---------------+-----------+--------+
+1 row in set (0.00 sec)
+
+
+mysql> create table Company(Company_name varchar(20),City varchar(10),primary key(Company_name)); Query OK, 0 rows affected (0.27 sec)
+
+
+mysql> create table Works(Employee_name varchar(20),Company_name varchar(20),Salary int(10),foreign key(Employee_name)references Employee(Employee_name),foreign key(Company_name)references Company(Company_name));
+Query OK, 0 rows affected (0.31 sec)
+
+mysql> insert into Company(Company_name,City) values('KPIT','Chennai');
+Query OK, 1 row affected (0.05 sec)
+
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Anuja','KPIT','1000000');
+Query OK, 1 row affected (0.04 sec)
+
+
+mysql> select * from Company;
++--------------+---------+
+| Company_name | City    |
++--------------+---------+
+| KPIT         | Chennai |
++--------------+---------+
+1 row in set (0.00 sec)
+
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Anuja         | KPIT         | 1000000 |
++---------------+--------------+---------+
+1 row in set (0.00 sec)
+
+
+mysql> create table Manages(Employee_name varchar(20),foreign key(Employee_name)references Employee(Employee_name),Manager_name varchar(20),foreign key(Manager_name)references Employee(Employee_name));
+Query OK, 0 rows affected (0.54 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Anuja','Anuja');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from Manages;
++---------------+--------------+
+| Employee_name | Manager_name |
++---------------+--------------+
+| Anuja         | Anuja        |
++---------------+--------------+
+1 row in set (0.00 sec)
+
+
+mysql> insert into Employee(Employee_name,Street,City) values('Disha','A_Road','Pune');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Pranesh','B_Road','Jammu');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Punam','C_Road','Kashmir');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into Employee(Employee_name,Street,City) values('Yash','D_Road','Kulu');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into Company(Company_name,City) values('Infosys','Banglore');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into Company(Company_name,City) values('TCS','Assam');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Company(Company_name,City) values('JetAir','Orissa');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Company(Company_name,City) values('Mastercard','Ranchi');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Disha','Infosys','2000000');Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Pranesh','TCS','3000000');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Punam','JetAir','4000000');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Works(Employee_name,Company_name,Salary) values('Yash','Mastercard','5000000');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Disha','Anuja');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Pranesh','Punam');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Punam','Pranesh');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Manages(Employee_name,Manager_name) values('Yash','Disha');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from Employee;
++---------------+-----------+---------+
+| Employee_name | Street    | City    |
++---------------+-----------+---------+
+| Anuja         | Maha_Road | Nashik  |
+| Disha         | A_Road    | Pune    |
+| Pranesh       | B_Road    | Jammu   |
+| Punam         | C_Road    | Kashmir |
+| Yash          | D_Road    | Kulu    |
++---------------+-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Company;
++--------------+----------+
+| Company_name | City     |
++--------------+----------+
+| Infosys      | Banglore |
+| JetAir       | Orissa   |
+| KPIT         | Chennai  |
+| Mastercard   | Ranchi   |
+| TCS          | Assam    |
++--------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Anuja         | KPIT         | 1000000 |
+| Disha         | Infosys      | 2000000 |
+| Pranesh       | TCS          | 3000000 |
+| Punam         | JetAir       | 4000000 |
+| Yash          | Mastercard   | 5000000 |
++---------------+--------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Manages;
++---------------+--------------+
+| Employee_name | Manager_name |
++---------------+--------------+
+| Anuja         | Anuja        |
+| Disha         | Anuja        |
+| Pranesh       | Punam        |
+| Punam         | Pranesh      |
+| Yash          | Disha        |
++---------------+--------------+
+5 rows in set (0.00 sec)
+
+
+mysql> update Works set Company_name='Infosys' where Employee_name='Punam';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Works;
++---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Anuja         | KPIT         | 1000000 |
+| Disha         | Infosys      | 2000000 |
+| Pranesh       | TCS          | 3000000 |
+| Punam         | Infosys      | 4000000 |
+| Yash          | Mastercard   | 5000000 |
++---------------+--------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> update Company set Company_name='First_Bank_Corp' where City='Orissa';
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Company;;
++-----------------+----------+
+| Company_name    | City     |
++-----------------+----------+
+| First_Bank_Corp | Orissa   |
+| Infosys         | Banglore |
+| KPIT            | Chennai  |
+| Mastercard      | Ranchi   |
+| TCS             | Assam    |
++-----------------+----------+
+5 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> select * from Works where Company_name='First_bank_Corp';
+Empty set (0.00 sec)
+
+mysql> update Works set Company_name='First_Bank_Corp' where Employee_name='Punam';
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Works where Company_name='First_bank_Corp';
++---------------+-----------------+---------+
+| Employee_name | Company_name    | Salary  |
++---------------+-----------------+---------+
+| Punam         | First_Bank_Corp | 4000000 |
++---------------+-----------------+---------+
+1 row in set (0.00 sec)
+
+mysql> tee /home/unix/Documents/Assign
+Logging to file '/home/unix/Documents/Assign'
+
+mysql> select Employee.Employee_name,Employee.City from Employee,Works where Works.Company_name='First_bank_Corp' and Employee.Employee_name=Works.Employee_name;
++---------------+---------+
+| Employee_name | City    |
++---------------+---------+
+| Punam         | Kashmir |
++---------------+---------+
+1 row in set (0.04 sec)
+
+mysql> select Employee.Employee_name,Employee.Street,Employee.City from Employee,Works where Works.Company_name='First_bank_Corp' and Employee.Employee_name=Works.Employee_name and Works.Salary>120000;
++---------------+--------+---------+
+| Employee_name | Street | City    |
++---------------+--------+---------+
+| Punam         | C_Road | Kashmir |
++---------------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> update Company set City='Assam' where Company_name='TCS';
+Query OK, 0 rows affected (0.03 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from Company;
++-----------------+----------+
+| Company_name    | City     |
++-----------------+----------+
+| First_Bank_Corp | Orissa   |
+| Infosys         | Banglore |
+| KPIT            | Chennai  |
+| Mastercard      | Ranchi   |
+| TCS             | Assam    |
++-----------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> update Company set City='Jammu' where Company_name='TCS';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Company;
++-----------------+----------+
+| Company_name    | City     |
++-----------------+----------+
+| First_Bank_Corp | Orissa   |
+| Infosys         | Banglore |
+| KPIT            | Chennai  |
+| Mastercard      | Ranchi   |
+| TCS             | Jammu    |
++-----------------+----------+
+5 rows in set (0.00 sec)
+
+
+mysql> select Employee.Employee_name from Employee,Works,Company where Employee.Employee_name=Works.Employee_name and Works.Company_name=Company.Company_name and Employee.City=Company.City;
++---------------+
+| Employee_name |
++---------------+
+| Pranesh       |
++---------------+
+1 row in set (0.02 sec)
+
+ 
+mysql> select * from Works where Company_name!='First_bank_Corp';+---------------+--------------+---------+
+| Employee_name | Company_name | Salary  |
++---------------+--------------+---------+
+| Anuja         | KPIT         | 1000000 |
+| Disha         | Infosys      | 2000000 |
+| Pranesh       | TCS          | 3000000 |
+| Yash          | Mastercard   | 5000000 |
++---------------+--------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select * from Company;
++-----------------+----------+
+| Company_name    | City     |
++-----------------+----------+
+| First_Bank_Corp | Orissa   |
+| Infosys         | Banglore |
+| KPIT            | Chennai  |
+| Mastercard      | Ranchi   |
+| TCS             | Jammu    |
++-----------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> update Works set City='Orissa' where Company_name='TCS';
+ERROR 1054 (42S22): Unknown column 'City' in 'field list'
+mysql> update Company set City='Orissa' where Company_name='TCS';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from Company;
++-----------------+----------+
+| Company_name    | City     |
++-----------------+----------+
+| First_Bank_Corp | Orissa   |
+| Infosys         | Banglore |
+| KPIT            | Chennai  |
+| Mastercard      | Ranchi   |
+| TCS             | Orissa   |
++-----------------+----------+
+5 rows in set (0.01 sec)
+
+mysql> select Company_name from Company where City=(select City where Company_name='First_Bank_Corp');
++-----------------+
+| Company_name    |
++-----------------+
+| First_Bank_Corp |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select Company_name from Company where City in(select City where Company_name='First_Bank_Corp');
++-----------------+
+| Company_name    |
++-----------------+
+| First_Bank_Corp |
++-----------------+
+1 row in set (0.01 sec)
+
+mysql> select Company_name from Company where City in(select Company_name from Company  where Company_name='First_Bank_Corp');
+Empty set (0.00 sec)
+
+mysql> select Company_name from Company where City in(select City from Company  where Company_name='First_Bank_Corp');
++-----------------+
+| Company_name    |
++-----------------+
+| First_Bank_Corp |
+| TCS             |
++-----------------+
+2 rows in set (0.00 sec)
+
+mysql> select Min(Salary) from Works;
++-------------+
+| Min(Salary) |
++-------------+
+|     1000000 |
++-------------+
+1 row in set (0.00 sec)
+
+
+mysql> select Employee_name from Works where Salary in (select MIN(Salary) from Works);
++---------------+
+| Employee_name |
++---------------+
+| Anuja         |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select Company.Company_name from Works,Company where Works.Salary>(select avg(Salary) from Works where Company_name='First_Bank_Corp');
++-----------------+
+| Company_name    |
++-----------------+
+| First_Bank_Corp |
+| First_Bank_Corp |
+| Infosys         |
+| Infosys         |
+| KPIT            |
+| KPIT            |
+| Mastercard      |
+| Mastercard      |
+| TCS             |
+| TCS             |
++-----------------+
+10 rows in set (0.01 sec)
+
+mysql> notee;
+mysql> select w.Company_name from Works w group by Company_name having avg(Salary)>all(select avg(Salary)from Works where Company_name='First_Bank_Corp');
++--------------+
+| Company_name |
++--------------+
+| TCS          |
++--------------+
+1 row in set (0.02 sec)
+
+mysql> notee;

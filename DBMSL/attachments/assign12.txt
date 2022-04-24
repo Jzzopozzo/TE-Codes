@@ -1,0 +1,149 @@
+****************************************************************************************************************
+
+DATE: 7/9/2017
+
+****************************************************************************************************************
+
+
+
+> use orders
+switched to db orders
+> db.createCollection("order")
+{ "ok" : 1 }
+> db.order.insert({cus_id: 'A1', amount: 400, status: 'A'})
+WriteResult({ "nInserted" : 1 })
+> db.order.insert({cus_id: 'B1', amount: 300, status: 'D'})
+WriteResult({ "nInserted" : 1 })
+> db.order.insert({cus_id: 'A1', amount: 200, status: 'C'})
+WriteResult({ "nInserted" : 1 })
+> db.order.insert({cus_id: 'C1', amount: 200, status: 'C'})
+WriteResult({ "nInserted" : 1 })
+> db.order.insert({cus_id: 'B1', amount: 700, status: 'A'})
+WriteResult({ "nInserted" : 1 })
+> db.order.insert({cus_id: 'B1', amount: 800, status: 'A'})
+WriteResult({ "nInserted" : 1 })
+> db.order.find().pretty()
+{
+	"_id" : ObjectId("59b25649d145377a8f92d64b"),
+	"cus_id" : "A1",
+	"amount" : 400,
+	"status" : "A"
+}
+{
+	"_id" : ObjectId("59b25651d145377a8f92d64c"),
+	"cus_id" : "B1",
+	"amount" : 300,
+	"status" : "D"
+}
+{
+	"_id" : ObjectId("59b2565bd145377a8f92d64d"),
+	"cus_id" : "A1",
+	"amount" : 200,
+	"status" : "C"
+}
+{
+	"_id" : ObjectId("59b25662d145377a8f92d64e"),
+	"cus_id" : "C1",
+	"amount" : 200,
+	"status" : "C"
+}
+{
+	"_id" : ObjectId("59b2567cd145377a8f92d64f"),
+	"cus_id" : "B1",
+	"amount" : 700,
+	"status" : "A"
+}
+{
+	"_id" : ObjectId("59b2568ad145377a8f92d650"),
+	"cus_id" : "B1",
+	"amount" : 800,
+	"status" : "A"
+}
+> db.order.mapReduce(function(){emit(this.cus_id,this.amount)},function(key,values){return Array.sum(values)},{out:"orders_totals"})
+{
+	"result" : "orders_totals",
+	"timeMillis" : 509,
+	"counts" : {
+		"input" : 6,
+		"emit" : 6,
+		"reduce" : 2,
+		"output" : 3
+	},
+	"ok" : 1
+}
+> db.orders_totals.find().pretty()
+{ "_id" : "A1", "value" : 600 }
+{ "_id" : "B1", "value" : 1800 }
+{ "_id" : "C1", "value" : 200 }
+
+**********************************************************************************************************************
+ db.order.mapReduce(function(){emit(this.cus_id,this.amount)},function(key,values){return Array.sum(values)},{out:"orders_of_A",query:{status:"A"}})
+{
+	"result" : "orders_of_A",
+	"timeMillis" : 451,
+	"counts" : {
+		"input" : 3,
+		"emit" : 3,
+		"reduce" : 1,
+		"output" : 2
+	},
+	"ok" : 1
+}
+> db.orders_of_A.find().pretty()
+{ "_id" : "A1", "value" : 400 }
+{ "_id" : "B1", "value" : 1500 }
+********************************************************************************************************************
+> db.order.mapReduce(function(){emit(this.cus_id,this.amount)},function(key,values){return Array.avg(values)},{out:"average_orders"})
+{
+	"result" : "average_orders",
+	"timeMillis" : 449,
+	"counts" : {
+		"input" : 6,
+		"emit" : 6,
+		"reduce" : 2,
+		"output" : 3
+	},
+	"ok" : 1
+}
+> db.average_orders.find().pretty()
+{ "_id" : "A1", "value" : 300 }
+{ "_id" : "B1", "value" : 600 }
+{ "_id" : "C1", "value" : 200 }
+*******************************************************************************************************************
+> var mapfunction=function(){emit(this.cus_id,this.amount)};
+> var reducefunction=function(key,values){return Math.min.apply(Math,values);};
+> db.order.mapReduce(mapfunction,reducefunction,{query:{},out:"min_orders"})
+{
+	"result" : "min_orders",
+	"timeMillis" : 477,
+	"counts" : {
+		"input" : 6,
+		"emit" : 6,
+		"reduce" : 2,
+		"output" : 3
+	},
+	"ok" : 1
+}
+> db.min_orders.find().pretty()
+{ "_id" : "A1", "value" : 200 }
+{ "_id" : "B1", "value" : 300 }
+{ "_id" : "C1", "value" : 200 }
+*********************************************************************************************************************
+> var mapfunction=function(){emit(this.cus_id,this.amount)};
+> var reducefunction=function(key,values){return Math.max.apply(Math,values);};
+> db.order.mapReduce(mapfunction,reducefunction,{query:{status:"C"},out:"max_orders"})
+{
+	"result" : "max_orders",
+	"timeMillis" : 446,
+	"counts" : {
+		"input" : 2,
+		"emit" : 2,
+		"reduce" : 0,
+		"output" : 2
+	},
+	"ok" : 1
+}
+> db.max_orders.find().pretty()
+{ "_id" : "A1", "value" : 200 }
+{ "_id" : "C1", "value" : 200 }
+********************************************************************************************************************
